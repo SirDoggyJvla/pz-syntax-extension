@@ -11,6 +11,9 @@ export enum DiagnosticType {
     missingComma = "Missing comma",
     unmatchedBrace = "Missing closing bracket '}' for '{scriptBlock}' block",
     notValidBlock = "'{scriptBlock}' is not a valid script block",
+    missingParentBlock = "'{scriptBlock}' block must be inside a valid parent block: {parentBlocks}",
+    hasParentBlock = "'{scriptBlock}' block cannot be inside any parent block",
+    wrongParentBlock = "'{scriptBlock}' block cannot be inside parent block '{parentBlock}'. Valid parent blocks are: {parentBlocks}",
 }
 
 // Helper function to format

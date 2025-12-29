@@ -14,10 +14,10 @@ import {
     componentBlockRegex,
     componentPropertiesRegex,
     fluidsPropertiesRegex,
-    fluidsBlockRegex,
-    scriptBlockRegex
+    fluidsBlockRegex
 } from '../models/regexPatterns';
-import { ScriptBlock, DocumentBlock } from "../utils/scriptBlocks";
+import { DocumentBlock } from "../utils/scriptBlocks";
+
 
 export class DiagnosticProvider {
     private diagnosticCollection: vscode.DiagnosticCollection;

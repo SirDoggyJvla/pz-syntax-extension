@@ -1,6 +1,24 @@
 import { TextDocument, Position } from 'vscode';
 import SCRIPTS_TYPES from '../data/scriptBlocks.json';
 
+
+export interface ScriptBlockParameter {
+    name: string;
+    description?: string;
+    itemTypes?: string[];
+}
+
+export interface ScriptBlockData {
+    version: number;
+    name: string;
+    description: string;
+    shouldHaveParent: boolean;
+    parents: string[];
+    parameters: { [key: string]: ScriptBlockParameter };
+}
+
+
+
 // generates a regex pattern to match any script block line
 export const blockNames = Object.keys(SCRIPTS_TYPES);
 const blockPattern = new RegExp(
@@ -50,19 +68,28 @@ export function getBlockType(document: TextDocument, lineNumber: number): string
 }
 
 
-export function getDescription(word: string, blockType: string, isScriptBlock: boolean): string | null {
-  if (isScriptBlock) {
-    return getScriptBlockDescription(blockType);
-  } else {
-    return getParameterDescription(word, blockType);
-  }
-
+/**
+ * Retrieve the script block data for a given block type
+ * @param blockType The script block type
+ * @returns ScriptBlockData | null
+ */
+export function getScriptBlockData(blockType: string): ScriptBlockData | null {
+  const blockData = SCRIPTS_TYPES[blockType as keyof typeof SCRIPTS_TYPES];
+  if (blockData) { return blockData; }
   return null;
 }
 
 
+export function getDescription(word: string, blockType: string, isScriptBlock: boolean): string | null {
+  // if it's a script block, get its description
+  if (isScriptBlock) {
+    return getScriptBlockDescription(blockType);
+  }
+  return getParameterDescription(word, blockType);
+}
+
 function getScriptBlockDescription(blockType: string): string | null {
-  const blockData = SCRIPTS_TYPES[blockType as keyof typeof SCRIPTS_TYPES];
+  const blockData = getScriptBlockData(blockType);
   if (blockData) {
     if (blockData.description) {
       return blockData.description;
@@ -72,7 +99,6 @@ function getScriptBlockDescription(blockType: string): string | null {
   }
   return null;
 }
-
 
 function getParameterDescription(word: string, blockType: string): string | null {
   // check if word is a parameter of the block type
