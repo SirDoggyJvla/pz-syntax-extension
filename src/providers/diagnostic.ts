@@ -17,6 +17,7 @@ import {
     fluidsBlockRegex,
     scriptBlockRegex
 } from '../models/regexPatterns';
+import { ScriptBlock, DocumentBlock } from "../utils/scriptBlocks";
 
 export class DiagnosticProvider {
     private diagnosticCollection: vscode.DiagnosticCollection;
@@ -28,10 +29,9 @@ export class DiagnosticProvider {
     public updateDiagnostics(document: vscode.TextDocument): void {
         const diagnostics: vscode.Diagnostic[] = [];
 
-        // // parse individual lines
-        const objects = this.mapDocument(document);
+        const documentBlock = new DocumentBlock(document, diagnostics);
 
-
+        this.diagnosticCollection.set(document.uri, diagnostics);
 
 
         return;
@@ -61,34 +61,6 @@ export class DiagnosticProvider {
     }
 
 
-    private mapDocument(document: vscode.TextDocument):
-    Array<{ 
-        
-     }> 
-    {
-        const objects: Array<{  }> = [];
-
-        console.debug('Searching for script blocks...');
-        const blocks = Array.from(document.getText().matchAll(scriptBlockRegex));
-        blocks.forEach(match => {
-            const startPos = document.positionAt(match.index!);
-            const endPos = document.positionAt(match.index! + match[0].length);
-            const range = new vscode.Range(startPos, endPos);
-
-            objects.push({
-                block: match[1],
-                id: match[2],
-                start: startPos,
-                end: endPos,
-                range: range,
-                match: match
-            });
-
-            console.debug('Found script block: ', match);
-        });
-
-        return objects;
-    }
     
     private validateItemBlock(match: RegExpMatchArray, document: vscode.TextDocument, diagnostics: vscode.Diagnostic[]): void {
         const blockContent = match[2];

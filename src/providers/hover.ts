@@ -4,7 +4,8 @@ import { getBlockType, getDescription } from "../models/constants";
 import { provideDefinition } from "./definition";
 import path from "path";
 import { itemBlockRegex } from "../models/regexPatterns";
-import { getColor, ThemeColorType } from "../utils/themeColors";
+import { getColor } from "../utils/themeColors";
+import { ThemeColorType } from "../models/enums";
 
 export class PZHoverProvider implements vscode.HoverProvider {
   async provideHover(

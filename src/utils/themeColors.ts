@@ -1,14 +1,6 @@
 import { extensions, workspace } from "vscode";
 import path from "path";
-
-export enum ThemeColorType {
-    ID = "entity.name.class",
-    ScriptBlock = "keyword.control",
-    Boolean = "constant.language.boolean",
-    Parameter = "variable.parameter",
-    Number = "constant.numeric.pz",
-    FullType = 'support.type.property-name',
-}
+import { ThemeColorType } from "../models/enums";
 
 /**
  * Retrieves token colors for a given theme.

@@ -3,6 +3,10 @@
     "version": 1.0,
     "name": "animationsMesh",
     "description": "Defines an animated mesh, usually for characters or animals.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "meshfile": {
         "name": "meshFile"
@@ -25,6 +29,11 @@
     "version": 1.0,
     "name": "model",
     "description": "Defines a 3D model properties.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module",
+      "vehicle"
+    ],
     "parameters": {
       "mesh": {
         "name": "mesh"
@@ -80,6 +89,10 @@
     "version": 1.0,
     "name": "timedAction",
     "description": "Defines a callable action sound and/or animation.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "metabolics": {
         "name": "metabolics"
@@ -119,22 +132,42 @@
       }
     }
   },
+  "module": {
+    "version": 1.0,
+    "name": "module",
+    "description": "A module holds different types of script definitions.",
+    "shouldHaveParent": false,
+    "parents": [],
+    "parameters": {}
+  },
   "passenger": {
     "version": 1.0,
     "name": "passenger",
     "description": "Defines a passenger position in a vehicle script.",
+    "shouldHaveParent": true,
+    "parents": [
+      "vehicle"
+    ],
     "parameters": {}
   },
   "energy": {
     "version": 1.0,
     "name": "energy",
     "description": "",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "craftRecipe": {
     "version": 1.0,
     "name": "craftRecipe",
     "description": "Defines a crafting recipe.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "inputs": {
         "name": "inputs"
@@ -215,6 +248,10 @@
     "version": 1.0,
     "name": "sound",
     "description": "Defines a sound properties.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "category": {
         "name": "category"
@@ -237,6 +274,10 @@
     "version": 1.0,
     "name": "entity",
     "description": "Defines a tile with special properties.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "name": {
         "name": "name"
@@ -373,6 +414,10 @@
     "version": 1.0,
     "name": "evolvedrecipe",
     "description": "Defines a dynamic recipe.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "baseitem": {
         "name": "BaseItem"
@@ -410,18 +455,30 @@
     "version": 1.0,
     "name": "animation",
     "description": "",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "ragdoll": {
     "version": 1.0,
     "name": "ragdoll",
     "description": "Defines the ragdoll properties of a bone.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "vehicle": {
     "version": 1.0,
     "name": "vehicle",
     "description": "Defines a vehicle.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "neverspawnkey": {
         "name": "neverSpawnKey"
@@ -627,6 +684,10 @@
     "version": 1.0,
     "name": "fluid",
     "description": "Defines a fluid.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "colorreference": {
         "name": "ColorReference"
@@ -652,6 +713,10 @@
     "version": 1.0,
     "name": "item",
     "description": "Defines an item to register.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "displaycategory": {
         "name": "DisplayCategory",
@@ -3158,24 +3223,40 @@
     "version": 1.0,
     "name": "fixing",
     "description": "Defines how an item can be repaired or fixed.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "physicsHitReaction": {
     "version": 1.0,
     "name": "physicsHitReaction",
     "description": "Defines the physics reaction a bullet or bomb imposes to objects.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "template": {
     "version": 1.0,
     "name": "template",
     "description": "",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {}
   },
   "mannequin": {
     "version": 1.0,
     "name": "mannequin",
     "description": "Defines a mannequin tile properties.",
+    "shouldHaveParent": true,
+    "parents": [
+      "module"
+    ],
     "parameters": {
       "female": {
         "name": "female"

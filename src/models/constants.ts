@@ -13,6 +13,10 @@ function isScriptBlockLine(line: string): string | null {
   return match ? match[1] : null;
 }
 
+export function isScriptBlock(word: string): boolean {
+  return word in SCRIPTS_TYPES;
+}
+
 // check if the position of the doc is within a script block
 export function getBlockType(document: TextDocument, lineNumber: number): string | null {
     let currentLine = lineNumber;
@@ -43,11 +47,6 @@ export function getBlockType(document: TextDocument, lineNumber: number): string
         currentLine--;
     }
     return null;
-}
-
-
-export function isScriptBlock(word: string): boolean {
-  return word in SCRIPTS_TYPES;
 }
 
 
