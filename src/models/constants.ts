@@ -2,7 +2,7 @@ import { TextDocument, Position } from 'vscode';
 import SCRIPTS_TYPES from '../data/scriptBlocks.json';
 
 // generates a regex pattern to match any script block line
-const blockNames = Object.keys(SCRIPTS_TYPES);
+export const blockNames = Object.keys(SCRIPTS_TYPES);
 const blockPattern = new RegExp(
   `^\\s*(${blockNames.join('|')})\\s+.*\\{.*$`
 );

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { VALID_KEYWORDS } from "../models/constants";
+import { VALID_KEYWORDS, isScriptBlock } from "../models/constants";
 import {
     itemBlockRegex,
     itemPropertiesRegex,
@@ -14,7 +14,8 @@ import {
     componentBlockRegex,
     componentPropertiesRegex,
     fluidsPropertiesRegex,
-    fluidsBlockRegex
+    fluidsBlockRegex,
+    scriptBlockRegex
 } from '../models/regexPatterns';
 
 export class DiagnosticProvider {
@@ -27,10 +28,8 @@ export class DiagnosticProvider {
     public updateDiagnostics(document: vscode.TextDocument): void {
         const diagnostics: vscode.Diagnostic[] = [];
 
-        // parse individual lines
+        // // parse individual lines
         const objects = this.mapDocument(document);
-
-
 
 
 
@@ -67,22 +66,26 @@ export class DiagnosticProvider {
         
      }> 
     {
-        const objects: Array<{ line: number; text: string }> = [];
+        const objects: Array<{  }> = [];
 
-        let currentLine = 0;
-        const totalLines = document.lineCount;
-        
-        // sounds like an inefficient way to do this...
-        // use regex like previously instead
-        while (currentLine < totalLines) {
-            const lineText = document.lineAt(currentLine).text;
-            const words = lineText.split(/\s+/);
-            words.forEach(word => {
-                console.debug(`Word: ${word} at line ${currentLine}`);
+        console.debug('Searching for script blocks...');
+        const blocks = Array.from(document.getText().matchAll(scriptBlockRegex));
+        blocks.forEach(match => {
+            const startPos = document.positionAt(match.index!);
+            const endPos = document.positionAt(match.index! + match[0].length);
+            const range = new vscode.Range(startPos, endPos);
+
+            objects.push({
+                block: match[1],
+                id: match[2],
+                start: startPos,
+                end: endPos,
+                range: range,
+                match: match
             });
 
-            currentLine++;
-        }
+            console.debug('Found script block: ', match);
+        });
 
         return objects;
     }
@@ -134,14 +137,17 @@ export class DiagnosticProvider {
     private validateCraftRecipeBlock(match: RegExpMatchArray, document: vscode.TextDocument, diagnostics: vscode.Diagnostic[]): void {
         const blockContent = match[2];
         const craftRecipeStart = match.index!;
+
+        console.debug('Validating craftRecipe block: ', match);
     
-        // Validation des propriétés principales du craftRecipe
+        // Validation of main craftRecipe properties
         const properties = Array.from(blockContent.matchAll(craftRecipePropertiesRegex));
+        console.debug('CraftRecipe properties found: ', properties);
         properties.forEach(prop => {
             const propName = prop[1];
             const hasComma = prop[3].trim().startsWith(',');
 
-            // Validation du mot-clé
+            // Validation of the keyword
             if (!this.isValidKeyword(propName, 'craftRecipe')) {
                 const propStart = document.positionAt(craftRecipeStart + match[0].indexOf(prop[0]));
                 const range = new vscode.Range(
@@ -232,23 +238,13 @@ export class DiagnosticProvider {
             }
         });
     }
-    
 
     private isValidKeyword(word: string, block: string): boolean {
         if (/^[{},\[\]"0-9]+$/.test(word) || word.includes('"')) {
             return true;
         }
 
-        const blockKeywords = [
-            "craftRecipe",
-            "item",
-            "fixing",
-            "component",
-            "inputs",
-            "outputs",
-            "itemMapper",
-        ];
-        if (blockKeywords.includes(word)) {
+        if (isScriptBlock(word)) {
             return true;
         }
 
