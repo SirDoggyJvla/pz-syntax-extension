@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { MarkdownString, TextDocument, Diagnostic } from "vscode";
-import { scriptBlockRegex } from '../models/regexPatterns';
+import { scriptBlockRegex, parameterRegex } from '../models/regexPatterns';
 import { ThemeColorType, DiagnosticType, DefaultText, formatDiagnostic } from '../models/enums';
 import { getColor } from "../utils/themeColors";
 import { isScriptBlock, getScriptBlockData, ScriptBlockData } from './scriptData';
@@ -22,6 +22,7 @@ export class ScriptBlock {
     scriptBlock: string = "";
     id: string | null = null;
     children: ScriptBlock[] = [];
+    parameters: ScriptParameter[] = [];
 
     // positions
     start: number = 0;
@@ -59,6 +60,7 @@ export class ScriptBlock {
         }
         this.children = this.findChildBlocks();
         this.validateChildren();
+        // this.parameters = this.findParameters();
     }
 
 
@@ -99,7 +101,7 @@ export class ScriptBlock {
     public getHoverText(): MarkdownString {
         const markdown = new vscode.MarkdownString();
         markdown.isTrusted = true; // needed for html rendering
-        
+
         // retrieve tree and description
         const tree = this.getTree();
         const desc = this.getDescription();
@@ -194,8 +196,43 @@ export class ScriptBlock {
         return children;
     }
 
-    protected findParameters(): void {
-        
+    protected findParameters(): ScriptParameter[] {
+        const document = this.document;
+        const text = document.getText().slice(this.start, this.end);
+
+        const parameters: ScriptParameter[] = [];
+
+        const matches = Array.from(text.matchAll(parameterRegex));
+
+        for (const match of matches) {
+            const fullMatch = match[0];
+            const paramName = match[1];
+            const paramValue = match[2];
+            const comma = match[3];
+
+            const parameterStart = this.start + fullMatch.indexOf(paramName);
+            const parameterEnd = parameterStart + paramName.length;
+            const valueStart = this.start + fullMatch.indexOf(paramValue);
+            const valueEnd = valueStart + paramValue.length;
+
+            const line = document.positionAt(parameterStart).line;
+            console.log(`Found parameter '${paramName}' with value '${paramValue}' at line ${line + 1} in block '${this.scriptBlock}'`);
+
+            const parameter = new ScriptParameter(
+                document,
+                this,
+                this.diagnostics,
+                paramName,
+                paramValue,
+                parameterStart,
+                parameterEnd,
+                valueStart,
+                valueEnd
+            );
+
+            parameters.push(parameter);
+        }
+        return parameters;
     } 
 
 
@@ -488,6 +525,7 @@ export class DocumentBlock extends ScriptBlock {
     protected validateBlock(): boolean { return true; }
     protected validateChildren(): boolean { return true; }
     protected validateID(): boolean { return true; }
+    protected findParameters(): ScriptParameter[] { return []; }
 }
 
 
