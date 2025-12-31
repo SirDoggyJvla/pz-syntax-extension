@@ -60,7 +60,7 @@ export class ScriptBlock {
         }
         this.children = this.findChildBlocks();
         this.validateChildren();
-        // this.parameters = this.findParameters();
+        this.parameters = this.findParameters();
     }
 
 
