@@ -1,4 +1,4 @@
-import { blockNames } from './scriptData';
+import { blockNames } from '../scripts/scriptData';
 
 // Modification pour capturer item avec ses éventuels sous-blocs component et Fluids
 export const itemBlockRegex = /\s*item\s+(\w+)\s*\{((?:[^{}]*|\{(?:[^{}]*|\{(?:[^{}]*|\{[^{}]*\})*\})*\})*)\}/g;
